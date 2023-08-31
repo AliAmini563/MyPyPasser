@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import Chrome
-
 import os
 import speech_recognition as sr
 from time import sleep
@@ -41,10 +40,10 @@ class reCaptchaV2(object):
         file_path = None
         
         try:
-            cls.__click_check_box__(instance.driver)
+            # cls.__click_check_box__(instance.driver)
             
-            if cls.__is_checked__(instance.driver):
-                return True
+            # if cls.__is_checked__(instance.driver):
+            #     return True
             
             cls.__click_audio_button__(instance.driver)
             
@@ -100,18 +99,34 @@ class reCaptchaV2(object):
         text_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR ,"#audio-response")))
         text_field.send_keys(text , Keys.ENTER)
         driver.switch_to.default_content()
-        
+
+
+
     def __is_checked__(driver):
         sleep(3)
-        driver.switch_to.frame(WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'iframe[name^=a]'))))
         try:
-            driver.find_element(By.CSS_SELECTOR, '.recaptcha-checkbox-checked')
+            frame = driver.find_elements(By.TAG_NAME, "iframe")[2]
+            # print("F1")
+            driver.switch_to.frame(frame)
+            # print("F2")
+            # sleep(5)
+            text_field = driver.find_element(By.CSS_SELECTOR ,"#audio-response")
+            # print("H1")
+            text_field.send_keys("testing")
+            # sleep(5)
+            # print("H2")
+            text_field.clear()
+            # print("F3")
+            driver.switch_to.default_content()
+        except:
+            # print("F4")
             driver.switch_to.default_content()
             return True
-        except NoSuchElementException:
+        else:
+            # print("F5")
             driver.switch_to.default_content()
             return False
-        
+            
     def speech_to_text(audio_path: str) -> str:   
         r = sr.Recognizer()
         with sr.AudioFile(audio_path) as source:
