@@ -25,7 +25,7 @@ pip install PyPasser --upgrade
 ### Install from Github (latest repo code)
 
 ```
-pip install git+https://github.com/xHossein/PyPasser@master
+pip install git+https://github.com/AliAmini563/MyPyPasser@master
 ```
 
 &nbsp;
